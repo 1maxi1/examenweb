@@ -1,0 +1,41 @@
+/* Тело страницы */
+body {
+    background-color: #000000b4;
+}
+
+/* Шапка сайта */
+header {
+    background-color: #ff7300;
+    padding: 10px;
+}
+
+.navbar-brand {
+    color: #ffc0cb; /* Розовый */
+    font-size: 24px;
+}
+
+.navbar-nav .nav-link {
+    color: #ffc0cb; /* Розовый */
+}
+
+/* Всплывающее уведомление */
+.alert {
+    background-color: #7fff00; /* Салатный */
+    color: #000000;
+    border-color: #ffc0cb; /* Розовый */
+}
+
+/* Блок с изображением и описанием компании */
+.container h2 {
+    color: #ff7300; /* Оранжевый */
+}
+
+.container p {
+    color: #ff7300; /* Оранжевый */
+}
+
+/* Дополнительные стили */
+.img-fluid {
+    max-width: 100%;
+    height: auto;
+}

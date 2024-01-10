@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Пешеходные маршруты по Москве</title>
+    <!-- Подключите стили Bootstrap для карточек и пагинации (при необходимости) -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Шапка сайта -->
+    <header>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <link rel="stylesheet" href="main.css">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#">
+                <img src="logo.jpg" alt="logo" class="logo">
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Личный кабинет</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Область для всплывающих уведомлений -->
+    <div class="container">
+        <div class="alert alert-info mt-3" role="alert">
+            Всплывающее уведомление
+        </div>
+    </div>
+
+    <!-- Блок с изображением и описанием компании -->
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <img src="company-image.jpg" alt="Изображение компании" class="img-fluid">
+            </div>
+            <div class="col-md-6">
+                <h2>О компании</h2>
+                <p>Наши экскурсии в Москве предлагают увлекательное путешествие по истории, культуре и достопримечательностям города. Мы специализируемся на организации и проведении уникальных маршрутов, которые позволяют как туристам, так и местным жителям глубже погрузиться в удивительное наследие этого удивительного мегаполиса. Доверьтесь нашим опытным гидам, чтобы открыть для себя уникальные моменты и прекрасные места Москвы. Разнообразные тематики экскурсий позволяют каждому выбрать оптимальный маршрут, соответствующий своим интересам и желаниям. Давайте вместе создадим незабываемые воспоминания о столице России.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Блок с информацией о достоинствах компании -->
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h2>Достоинства компании</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Высокое качество услуг</h5>
+                        <p class="card-text">Наша туристическая компания в Москве гордится своим высоким качеством услуг. Мы предлагаем не только незабываемые путешествия и экскурсии, но и уникальный сервис, который оставляет только положительные впечатления у наших клиентов.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Опытные гиды</h5>
+                        <p class="card-text">Наша компания гарантирует наличие высококвалифицированных и опытных гидов, обладающих глубокими знаниями о Москве, ее истории, культуре, архитектуре и многочисленных достопримечательностях. Их уникальный подход к передаче информации делает каждую экскурсию увлекательным и познавательным путешествием. Наши гиды истинные энтузиасты, способные оживить историю и заинтересовать даже самых требовательных путешественников. Благодаря их профессионализму и страсти к делу, каждая экскурсия становится неповторимым опытом, погружая в уникальную атмосферу Москвы и ее богатого наследия.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Удобный поиск маршрутов</h5>
+                        <p class="card-text">Благодаря интуитивно понятному интерфейсу, вы легко найдете самые интересные и популярные достопримечательности города, а также узнаете о специальных предложениях и эксклюзивных маршрутах. Полный контроль над своим путешествием - в ваших руках!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h2>Пешеходные маршруты по Москве</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <form id="search-form">
+                    <div class="form-group">
+                        <label for="route-name">Поиск маршрута по названию:</label>
+                        <input type="text" class="form-control" id="route-name">
+                    </div>
+                    <div class="form-group">
+                        <label for="landmark">Поиск маршрута через достопримечательность:</label>
+                        <select class="form-control" id="landmark">
+                            <option value="">Выберите достопримечательность</option>
+                            <!-- Опции будут добавлены с помощью JavaScript -->
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Найти маршрут</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mt-4">
+        <div class="row" id="routes-list">
+            <!-- Здесь будут отображаться маршруты -->
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <nav aria-label="Список маршрутов">
+                    <ul class="pagination" id="pagination">
+                        <!-- Здесь будут отображаться страницы маршрутов -->
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h2>Доступные гиды</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <h3 id="selected-route-name">Название выбранного маршрута</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card" id="guide-card-1" onclick="selectGuideFun(1)">
+                    <div class="card-body">
+                        <h5 class="card-title" id="card-title-1">Гид 1</h5>
+                        <p class="card-text" id="card-text-1">Дополнительная информация о гиде 1.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card" id="guide-card-2" onclick="selectGuideFun(2)">
+                    <div class="card-body">
+                        <h5 class="card-title" id="card-title-2">Гид 2</h5>
+                        <p class="card-text" id="card-text-2">Дополнительная информация о гиде 2.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Блок с кнопкой "Оформить заявку" и модальным окном для ввода деталей заказа -->
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <button type="button" class="btn btn-primary" id = "btn-primary-order" data-toggle="modal" data-target="#orderModal">
+                    Оформить заявку
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно для оформления заявки -->
+    <div class="modal fade" id="orderModal" tabindex="-1" aria-labelledby="orderModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="orderModalLabel">Оформление заявки</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+							<label for="modal-route-name">Маршрут:</label>
+							<input type="text" class="form-control" id="modal-route-name" readonly>
+						</div>
+						<div class="form-group">
+							<label for="modal-guide-name">Гид:</label>
+							<input type="text" class="form-control" id="modal-guide-name" readonly>
+						</div>
+                        <div class="form-group">
+                            <label for="tour-date">Дата экскурсии:</label>
+                            <input type="date" class="form-control" id="tour-date">
+                        </div>
+                        <div class="form-group">
+                            <label for="tour-time">Время начала экскурсии:</label>
+                            <input type="time" class="form-control" id="tour-time">
+                        </div>
+                        <div class="form-group">
+                            <label for="tour-duration">Длительность экскурсии:</label>
+                            <select class="form-control" id="tour-duration">
+                                <option value="1">1 час</option>
+                                <option value="2">2 часа</option>
+                                <option value="3">3 часа</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="group-size">Количество человек в группе:</label>
+                            <input type="number" class="form-control" id="group-size">
+                        </div>
+                        <div class="form-group">
+                            <label>Дополнительные опции:</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="option1">
+                                <label class="form-check-label" for="option1">Опция 1</label>
+                                <span>1000 рублей</span>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="option2">
+                                <label class="form-check-label" for="option2">Опция 2</label>
+                                <span>30%</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="total-cost">Итоговая стоимость:</label>
+                            <input type="text" class="form-control" id="total-cost" value="0 Руб." readonly>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary">Отправить</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Отменить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Футер с контактными данными -->
+    <footer class="mt-5 bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <p>Контактные данные</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Подключение Bootstrap JS и jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- Подключите скрипты JavaScript (после основного содержимого страницы) -->
+    <script src="/scripts.js"></script>
+</body>
+</html>
