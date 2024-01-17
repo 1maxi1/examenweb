@@ -1,88 +1,253 @@
-'use strict';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Пешеходные маршруты по Москве</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
 
-const express = require('express');
-const bodyParser = require('body-parser');
-const fetch = require('node-fetch');
-const fs = require('fs');
-const path = require('path');
+    <header class="bg-dark text-white">
+        <div class="container">
+            <nav class="navbar navbar-expand-lg navbar-dark">
+                <a class="navbar-brand" href="#">
+                    <img src="logo.jpg" alt="logo" class="logo">
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Личный кабинет</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </header>
 
-const app = express();
-const PORT = process.env.PORT || 3005;
+    <div class="container mt-4">
+        <div class="alert alert-info" role="alert">
+            Всплывающее уведомление
+        </div>
+    </div>
 
-app.use(bodyParser.json());
+    <div class="container my-5">
+        <div class="row">
+            <div class="col-md-6">
+                <img src="company-image.jpg" alt="Изображение компании" class="img-fluid">
+            </div>
+            <div class="col-md-6">
+                <h2 class="text-primary">О нас</h2>
+                <p class="lead">Откройте для себя уникальные маршруты истории и культуры Москвы с нашей туристической компанией. Мы предлагаем увлекательные экскурсии, созданные для вас, чтобы погрузиться в богатство нашей столицы. Наши гиды — это настоящие энтузиасты, готовые сделать ваш опыт незабываемым.</p>
+            </div>
+        </div>
+    </div>
 
-const BASE_URL = "http://exam-2023-1-api.std-900.ist.mospolytech.ru/";
-const API_KEY = "8515da15-8223-4988-a2da-0e110aeea1a2";
+    <div class="container my-5">
+        <div class="row">
+            <div class="col">
+                <h2 class="text-success">Наши преимущества</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card border-primary">
+                    <div class="card-body">
+                        <h5 class="card-title">Высокое качество услуг</h5>
+                        <p class="card-text">Наша компания гордится предоставлением высококачественных услуг, создавая для вас незабываемые моменты в путешествиях по Москве.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-success">
+                    <div class="card-body">
+                        <h5 class="card-title">Опытные гиды</h5>
+                        <p class="card-text">Наши гиды обладают глубокими знаниями о Москве и ее истории. Их страсть и профессионализм делают каждую экскурсию уникальным путешествием.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-info">
+                    <div class="card-body">
+                        <h5 class="card-title">Легкий поиск маршрутов</h5>
+                        <p class="card-text">Используйте удобный интерфейс для поиска интересных маршрутов и специальных предложений. Путешествуйте с уверенностью!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h2>Пешеходные маршруты по Москве</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <form id="search-form">
+                    <div class="form-group">
+                        <label for="route-name">Поиск маршрута по названию:</label>
+                        <input type="text" class="form-control" id="route-name">
+                    </div>
+                    <div class="form-group">
+                        <label for="landmark">Поиск маршрута через достопримечательность:</label>
+                        <select class="form-control" id="landmark">
+                            <option value="">Выберите достопримечательность</option>
+                            <!-- Опции будут добавлены с помощью JavaScript -->
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Найти маршрут</button>
+                </form>
+            </div>
+        </div>
+    </div>
 
-const toSnakeCase = (str) => str.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
+    <div class="container mt-4">
+        <div class="row" id="routes-list">
+            <!-- Здесь будут отображаться маршруты -->
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <nav aria-label="Список маршрутов">
+                    <ul class="pagination" id="pagination">
+                        <!-- Здесь будут отображаться страницы маршрутов -->
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h2>Доступные гиды</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <h3 id="selected-route-name">Название выбранного маршрута</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card" id="guide-card-1" onclick="selectGuideFun(1)">
+                    <div class="card-body">
+                        <h5 class="card-title" id="card-title-1">Гид 1</h5>
+                        <p class="card-text" id="card-text-1">Дополнительная информация о гиде 1.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card" id="guide-card-2" onclick="selectGuideFun(2)">
+                    <div class="card-body">
+                        <h5 class="card-title" id="card-title-2">Гид 2</h5>
+                        <p class="card-text" id="card-text-2">Дополнительная информация о гиде 2.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Блок с кнопкой "Оформить заявку" и модальным окном для ввода деталей заказа -->
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <button type="button" class="btn btn-primary" id = "btn-primary-order" data-toggle="modal" data-target="#orderModal">
+                    Оформить заявку
+                </button>
+            </div>
+        </div>
+    </div>
 
-const encodeFormData = (data) => {
-  const formBody = Object.entries(data)
-    .map(([key, value]) => `${encodeURIComponent(toSnakeCase(key))}=${encodeURIComponent(value)}`)
-    .join("&");
-  return formBody;
-};
+    <!-- Модальное окно для оформления заявки -->
+    <div class="modal fade" id="orderModal" tabindex="-1" aria-labelledby="orderModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="orderModalLabel">Оформление заявки</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+							<label for="modal-route-name">Маршрут:</label>
+							<input type="text" class="form-control" id="modal-route-name" readonly>
+						</div>
+						<div class="form-group">
+							<label for="modal-guide-name">Гид:</label>
+							<input type="text" class="form-control" id="modal-guide-name" readonly>
+						</div>
+                        <div class="form-group">
+                            <label for="tour-date">Дата экскурсии:</label>
+                            <input type="date" class="form-control" id="tour-date">
+                        </div>
+                        <div class="form-group">
+                            <label for="tour-time">Время начала экскурсии:</label>
+                            <input type="time" class="form-control" id="tour-time">
+                        </div>
+                        <div class="form-group">
+                            <label for="tour-duration">Длительность экскурсии:</label>
+                            <select class="form-control" id="tour-duration">
+                                <option value="1">1 час</option>
+                                <option value="2">2 часа</option>
+                                <option value="3">3 часа</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="group-size">Количество человек в группе:</label>
+                            <input type="number" class="form-control" id="group-size">
+                        </div>
+                        <div class="form-group">
+                            <label>Дополнительные опции:</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="option1">
+                                <label class="form-check-label" for="option1">Опция 1</label>
+                                <span>1000 рублей</span>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="option2">
+                                <label class="form-check-label" for="option2">Опция 2</label>
+                                <span>30%</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="total-cost">Итоговая стоимость:</label>
+                            <input type="text" class="form-control" id="total-cost" value="0 Руб." readonly>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary">Отправить</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Отменить</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-const fetchData = async (url, errorMessage) => {
-  try {
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`HTTP Error: ${response.status}`);
-    }
-    const data = await response.json();
-    if ("error" in data) {
-      throw new Error(data.error);
-    } else {
-      console.log(`Data successfully fetched from ${url}`);
-      return data;
-    }
-  } catch (error) {
-    console.error(`${errorMessage}: ${error.message}`);
-    throw error;
-  }
-};
+    <!-- Футер с контактными данными -->
+    <footer class="mt-5 bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <p>Контактные данные</p>
+                </div>
+            </div>
+        </div>
+    </footer>
 
-const getRoutes = async () => {
-  const url = new URL("api/routes", BASE_URL);
-  url.searchParams.set(toSnakeCase("API_KEY"), API_KEY);
-  return fetchData(url, "Error while fetching route data");
-};
+    <!-- Подключение Bootstrap JS и jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-const getGuides = async (routeId) => {
-  const url = new URL(`api/routes/${routeId}/guides`, BASE_URL);
-  url.searchParams.set(toSnakeCase("API_KEY"), API_KEY);
-  return fetchData(url, "Error while fetching guide data");
-};
-
-const saveDataToFile = async (data) => {
-  try {
-    const filePath = path.join(__dirname, 'data.json');
-
-    for (const route of data) {
-      const guidesData = await getGuides(route.id);
-      route.guides = guidesData;
-    }
-
-    fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf-8');
-    console.log("Data successfully saved to data.json");
-  } catch (error) {
-    console.error(`Error while saving data: ${error.message}`);
-    throw error;
-  }
-};
-
-app.get('/get-data', async (req, res) => {
-  try {
-    const data = await getRoutes();
-    await saveDataToFile(data);
-    res.json({ message: "Data successfully fetched and saved" });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Error while fetching and saving data" });
-  }
-});
-
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
-
+    <!-- Подключите скрипты JavaScript (после основного содержимого страницы) -->
+    <script src="/scripts.js"></script>
+</body>
+</html>
