@@ -7,99 +7,82 @@ const fs = require('fs');
 const path = require('path');
 
 const app = express();
-const PORT = process.env.PORT || 3005; // Порт, на котором будет работать сервер
+const PORT = process.env.PORT || 3005;
 
 app.use(bodyParser.json());
 
 const BASE_URL = "http://exam-2023-1-api.std-900.ist.mospolytech.ru/";
 const API_KEY = "8515da15-8223-4988-a2da-0e110aeea1a2";
 
-const varToString = varObj => Object.keys(varObj)[0].toLowerCase();
+const toSnakeCase = (str) => str.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
 
-const dataShield = async (data) => {
-  let formBody = [];
-  for (let property in data) {
-    let encodedKey = encodeURIComponent(property);
-    let encodedValue = encodeURIComponent(data[property]);
-    formBody.push(encodedKey + "=" + encodedValue);
-  }
-  formBody = formBody.join("&");
+const encodeFormData = (data) => {
+  const formBody = Object.entries(data)
+    .map(([key, value]) => `${encodeURIComponent(toSnakeCase(key))}=${encodeURIComponent(value)}`)
+    .join("&");
   return formBody;
 };
 
-const getRoutes = async () => {
+const fetchData = async (url, errorMessage) => {
   try {
-    let endpoint = new URL("api/routes", BASE_URL);
-    endpoint.searchParams.set(varToString({ API_KEY }), API_KEY);
-    let response = await fetch(endpoint);
+    const response = await fetch(url);
     if (!response.ok) {
-      throw new Error(`Ошибка HTTP: ${response.status}`);
+      throw new Error(`HTTP Error: ${response.status}`);
     }
-    let data = await response.json();
+    const data = await response.json();
     if ("error" in data) {
       throw new Error(data.error);
     } else {
-      console.log("Данные о маршрутах успешно получены");
+      console.log(`Data successfully fetched from ${url}`);
       return data;
     }
   } catch (error) {
-    console.error("Ошибка при получении данных о маршрутах:", error.message);
+    console.error(`${errorMessage}: ${error.message}`);
     throw error;
   }
 };
 
+const getRoutes = async () => {
+  const url = new URL("api/routes", BASE_URL);
+  url.searchParams.set(toSnakeCase("API_KEY"), API_KEY);
+  return fetchData(url, "Error while fetching route data");
+};
+
 const getGuides = async (routeId) => {
-  try {
-    let endpoint = new URL(`api/routes/${routeId}/guides`, BASE_URL);
-    endpoint.searchParams.set(varToString({ API_KEY }), API_KEY);
-    let response = await fetch(endpoint);
-    if (!response.ok) {
-      throw new Error(`Ошибка HTTP: ${response.status}`);
-    }
-    let data = await response.json();
-    if ("error" in data) {
-      throw new Error(data.error);
-    } else {
-      console.log("Данные о гидах успешно получены");
-      return data;
-    }
-  } catch (error) {
-    console.error("Ошибка при получении данных о гидах:", error.message);
-    throw error;
-  }
+  const url = new URL(`api/routes/${routeId}/guides`, BASE_URL);
+  url.searchParams.set(toSnakeCase("API_KEY"), API_KEY);
+  return fetchData(url, "Error while fetching guide data");
 };
 
 const saveDataToFile = async (data) => {
   try {
-    const filePath = path.join(__dirname, 'data.json'); // Путь к файлу
+    const filePath = path.join(__dirname, 'data.json');
 
-    // Для каждого маршрута, получите данные о гидах и добавьте их к маршруту
-    for (let route of data) {
-      const guidesData = await getGuides(route.id); // Получить данные о гидах для маршрута
-      route.guides = guidesData; // Добавить данные о гидах к маршруту
+    for (const route of data) {
+      const guidesData = await getGuides(route.id);
+      route.guides = guidesData;
     }
 
     fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf-8');
-    console.log("Данные успешно сохранены в data.json");
+    console.log("Data successfully saved to data.json");
   } catch (error) {
-    console.error("Ошибка при сохранении данных:", error.message);
+    console.error(`Error while saving data: ${error.message}`);
     throw error;
   }
 };
 
-// Роут для получения данных и сохранения их в файл
 app.get('/get-data', async (req, res) => {
   try {
-    let data = await getRoutes();
-    saveDataToFile(data);
-    res.json({ message: "Данные успешно получены и сохранены" });
+    const data = await getRoutes();
+    await saveDataToFile(data);
+    res.json({ message: "Data successfully fetched and saved" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Произошла ошибка при получении и сохранении данных" });
+    res.status(500).json({ error: "Error while fetching and saving data" });
   }
 });
 
-// Запуск сервера
 app.listen(PORT, () => {
-  console.log(`Сервер запущен на порту ${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });
+
